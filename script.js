@@ -42,5 +42,18 @@ window.addEventListener("load", function() {
 
 		let gameField = document.createElement("table");
 		gameField.classList.add("gameField");
+
+		let tdArray = [];
+		for (let i = 0; i < y; i++) {
+			let tr = document.createElement("tr");
+			tdArray[i] = [];
+			for (let k = 0; k < x; k++) {
+				let td = document.createElement("td");
+				tdArray[i].push(td);
+				tr.appendChild(td);
+			}
+			gameField.appendChild(tr);
+		}
+		document.body.appendChild(gameField);
 	});
 });

@@ -79,3 +79,14 @@
     background: red;
     color: white;
 }
+
+.gameField {
+	border-collapse: collapse;
+	margin: 15px auto;
+}
+
+.gameField tr td {
+	width: 15px;
+	height: 15px;
+	border: 1px solid black;
+}
