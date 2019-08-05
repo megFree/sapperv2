@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Sapper v2</title>
+	<link rel="stylesheet" href="style.css">
+	<link href="https://fonts.googleapis.com/css?family=Blinker&display=swap" rel="stylesheet">
+	<script src="https://kit.fontawesome.com/5e289a166a.js"></script>
+	<script src="script.js"></script>
+</head>
+<body>
+	<div class="startGameWrap">
+		<h1 class="startGameHeader">sapper</h1>
+		<div class="selectModeMenu" id="selectModeMenu">
+			<div class="selectModeMenu__selected">
+				<div class="selectModeMenu__selected_value">choose game mode</div>
+				<div class="selectModeMenu__selected_angle"><i class="fas fa-angle-down"></i></div>
+			</div>
+			<div class="selectModeMenu__optionList hidden" id="optionList">
+				<div class="selectoModeMenu__optionList-itm">10x10</div>
+				<div class="selectoModeMenu__optionList-itm">10x15</div>
+				<div class="selectoModeMenu__optionList-itm">10x20</div>
+			</div>
+		</div>
+		<input type="button" class="startGameBtn" value="start game" id="startGameBtn">
+	</div>
+</body>
+</html>
