@@ -105,23 +105,19 @@ window.addEventListener("load", function() {
 
 			function openEmptyCells(elem) {
 				let coords = elem.id.match(/[0-9]+/g);
-				let x = +coords[1];
 				let y = +coords[0];
-				
-				recursiveOpenCell(y, x);
+				let x = +coords[1];
 
-				//я тут словил ПЕРЕПОЛНЕНИЕ СТЕКА, ПРИ РАБОТАЮЩИЕЙ РЕКУРСИИ
-				//не думал, что столкнусь с таким
-				function recursiveOpenCell(y, x) {
-					
-				}
+			function openTopCell(y, x) {
+				tdArray[y - 1][x].querySelector(".innerDiv").classList.remove("hidden");
+				tdArray[y - 1][x].classList.remove("unOpened");
 			}
 		}
 
 		function generateBombs(event) {
 			for (let i = 0; i < tdArray.length; i++) {
 				for (let k = 0; k < tdArray[i].length; k++) {
-					if (Math.round(Math.random() * 10 > 9)) {
+					if (Math.round(Math.random() * 40 > 39)) {
 						tdArray[i][k].classList.add("bomb");
 					}
 				}
