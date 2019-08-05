@@ -51,6 +51,7 @@ window.addEventListener("load", function() {
 				let td = document.createElement("td");
 				tdArray[i].push(td);
 				td.classList.add("unOpened");
+				td.id = i + " " + k;
 				tr.appendChild(td);
 			}
 			gameField.appendChild(tr);
@@ -98,13 +99,29 @@ window.addEventListener("load", function() {
 			event.target.classList.remove("unOpened");
 
 			//нажали на пустое место
-			
+			if (event.target.querySelector(".innerDiv").textContent == "") {
+				openEmptyCells(event.target);
+			}
+
+			function openEmptyCells(elem) {
+				let coords = elem.id.match(/[0-9]+/g);
+				let x = +coords[1];
+				let y = +coords[0];
+				
+				recursiveOpenCell(y, x);
+
+				//я тут словил ПЕРЕПОЛНЕНИЕ СТЕКА, ПРИ РАБОТАЮЩИЕЙ РЕКУРСИИ
+				//не думал, что столкнусь с таким
+				function recursiveOpenCell(y, x) {
+					
+				}
+			}
 		}
 
 		function generateBombs(event) {
 			for (let i = 0; i < tdArray.length; i++) {
 				for (let k = 0; k < tdArray[i].length; k++) {
-					if (Math.round(Math.random() * 10 > 7)) {
+					if (Math.round(Math.random() * 10 > 9)) {
 						tdArray[i][k].classList.add("bomb");
 					}
 				}
