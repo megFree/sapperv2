@@ -50,10 +50,136 @@ window.addEventListener("load", function() {
 			for (let k = 0; k < x; k++) {
 				let td = document.createElement("td");
 				tdArray[i].push(td);
+				td.classList.add("unOpened");
 				tr.appendChild(td);
 			}
 			gameField.appendChild(tr);
 		}
 		document.body.appendChild(gameField);
+
+		for (let i = 0; i < tdArray.length; i++) {
+			for (let k = 0; k < tdArray[i].length; k++) {
+				tdArray[i][k].addEventListener("click", generateBombs);
+			}
+		}
+
+		for (let i = 0; i < tdArray.length; i++) {
+			for (let k = 0; k < tdArray[i].length; k++) {
+				tdArray[i][k].addEventListener("click", openCell);
+			}
+		}
+
+		function openCell(event) {
+			//нажали на бомбу
+			if (event.target.classList.contains("bomb")) {
+				for (let i = 0; i < tdArray.length; i++) {
+					for (let k = 0; k < tdArray[i].length; k++) {
+						tdArray[i][k].removeEventListener("click", openCell);
+					}
+				}
+
+				for (let i = 0; i < tdArray.length; i++) {
+					for (let k = 0; k < tdArray[i].length; k++) {
+						if (tdArray[i][k].classList.contains("bomb")) {
+							tdArray[i][k].classList.add("redBackground");
+							tdArray[i][k].classList.remove("unOpened");
+						}
+					}
+				}
+
+				let endGameBlock = document.createElement("div");
+				endGameBlock.classList.add("endGamePage");
+				endGameBlock.textContent = "you lose";
+				document.body.appendChild(endGameBlock);
+			}
+
+			//нажали на цифру
+			event.target.querySelector(".innerDiv").classList.remove("hidden");
+			event.target.classList.remove("unOpened");
+
+			//нажали на пустое место
+			
+		}
+
+		function generateBombs(event) {
+			for (let i = 0; i < tdArray.length; i++) {
+				for (let k = 0; k < tdArray[i].length; k++) {
+					if (Math.round(Math.random() * 10 > 7)) {
+						tdArray[i][k].classList.add("bomb");
+					}
+				}
+			}	
+			if (event.target.classList.contains("bomb")) {
+				event.target.classList.remove("bomb");
+			}
+
+			for (let i = 0; i < tdArray.length; i++) {
+				for (let k = 0; k < tdArray[i].length; k++) {
+					if (tdArray[i][k].classList.contains("bomb")) {
+						if (tdArray[i][k - 1] !== undefined) {
+							tdArray[i][k - 1].className += " _b";
+						}
+						if (tdArray[i][k + 1] !== undefined) {
+							tdArray[i][k + 1].className += " _b";
+						}
+						if (tdArray[i - 1] !== undefined) {
+							if (tdArray[i - 1][k - 1] !== undefined) {
+								tdArray[i - 1][k - 1].className += " _b";
+							}
+							if (tdArray[i - 1][k] !== undefined) {
+								tdArray[i - 1][k].className += " _b";
+							}
+							if (tdArray[i - 1][k + 1] !== undefined) {
+								tdArray[i - 1][k + 1].className += " _b";
+							}
+						}
+						if (tdArray[i + 1] !== undefined) {
+							if (tdArray[i + 1][k - 1] !== undefined) {
+								tdArray[i + 1][k - 1].className += " _b";
+							}
+							if (tdArray[i + 1][k] !== undefined) {
+								tdArray[i + 1][k].className += " _b";
+							}
+							if (tdArray[i + 1][k + 1] !== undefined) {
+								tdArray[i + 1][k + 1].className += " _b";
+							}
+						}
+					}
+				}
+			}
+
+			for (let i = 0; i < tdArray.length; i++) {
+				for (let k = 0; k < tdArray[i].length; k++) {
+					if (tdArray[i][k].classList.contains("bomb")) {
+						continue;
+					}
+					let innerDiv = document.createElement("div");
+					innerDiv.classList.add("hidden", "innerDiv");
+					tdArray[i][k].appendChild(innerDiv);
+				}
+			}
+
+			for (let i = 0; i < tdArray.length; i++) {
+				for (let k = 0; k < tdArray[i].length; k++) {
+					if (tdArray[i][k].classList.contains("bomb")) {
+						tdArray[i][k].classList.remove("_b");
+						continue;
+					}
+					let numberOfBombs = tdArray[i][k].className.match(/_b/g);
+					if (numberOfBombs == null) {
+						continue;
+					}
+					numberOfBombs = numberOfBombs.length;
+					tdArray[i][k].querySelector(".innerDiv").textContent = numberOfBombs;
+					tdArray[i][k].classList.remove("_b");
+				}
+			}
+
+			for (let i = 0; i < tdArray.length; i++) {
+				for (let k = 0; k < tdArray[i].length; k++) {
+					tdArray[i][k].removeEventListener("click", generateBombs);
+				}
+			}
+		}
 	});
 });
