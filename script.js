@@ -104,20 +104,74 @@ window.addEventListener("load", function() {
 			}
 
 			function openEmptyCells(elem) {
+				let toCheck = [];
 				let coords = elem.id.match(/[0-9]+/g);
 				let y = +coords[0];
 				let x = +coords[1];
 
-			function openTopCell(y, x) {
-				tdArray[y - 1][x].querySelector(".innerDiv").classList.remove("hidden");
-				tdArray[y - 1][x].classList.remove("unOpened");
+				//добавили в массив правый элемент
+				toCheck.push(tdArray[y][x + 1]);
+
+				for (let i = 0; i < toCheck.length; i++) {
+					toCheck[i].classList.remove("unOpened");
+					toCheck[i].querySelector(".innerDiv").classList.remove("hidden");
+					toCheck[i].classList.add("checked");
+					if (toCheck[i].querySelector(".innerDiv").textContent != "") {
+						continue;
+					}
+
+					let localCoords = toCheck[i].id.match(/[0-9]+/g);
+					let localX = +localCoords[1];
+					let localY = +localCoords[0];
+
+					if (tdArray[localY + 1] != undefined) {
+						if (!tdArray[localY + 1][localX].classList.contains("checked")) {
+							toCheck.push(tdArray[localY + 1][localX]);
+						}
+						if (tdArray[localY + 1][localX + 1] != undefined) {
+							if (!tdArray[localY + 1][localX + 1].classList.contains("checked")) {
+								toCheck.push(tdArray[localY + 1][localX + 1]);
+							}
+						}
+						if (tdArray[localY + 1][localX - 1] != undefined) {
+							if (!tdArray[localY + 1][localX - 1].classList.contains("checked")) {
+								toCheck.push(tdArray[localY + 1][localX - 1]);
+							}
+						}
+					}
+					if (tdArray[localY - 1] != undefined) {
+						if (!tdArray[localY - 1][localX].classList.contains("checked")) {
+							toCheck.push(tdArray[localY - 1][localX]);
+						}
+						if (tdArray[localY - 1][localX + 1] != undefined) {
+							if (!tdArray[localY - 1][localX + 1].classList.contains("checked")) {
+								toCheck.push(tdArray[localY - 1][localX + 1]);
+							}
+						}
+						if (tdArray[localY - 1][localX - 1] != undefined) {
+							if (!tdArray[localY - 1][localX - 1].classList.contains("checked")) {
+								toCheck.push(tdArray[localY - 1][localX - 1]);
+							}
+						}
+					}
+					if (tdArray[localY][localX - 1] != undefined) {
+						if (!tdArray[localY][localX - 1].classList.contains("checked")) {
+							toCheck.push(tdArray[localY][localX - 1]);
+						}
+					}
+					if (tdArray[localY][localX + 1] != undefined) {
+						if (!tdArray[localY][localX + 1].classList.contains("checked")) {
+							toCheck.push(tdArray[localY][localX + 1]);
+						}
+					}
+				}
 			}
 		}
 
 		function generateBombs(event) {
 			for (let i = 0; i < tdArray.length; i++) {
 				for (let k = 0; k < tdArray[i].length; k++) {
-					if (Math.round(Math.random() * 40 > 39)) {
+					if (Math.round(Math.random() * 10 > 9)) {
 						tdArray[i][k].classList.add("bomb");
 					}
 				}
