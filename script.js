@@ -191,7 +191,7 @@ window.addEventListener("load", function() {
 		function generateBombs(event) {
 			for (let i = 0; i < tdArray.length; i++) {
 				for (let k = 0; k < tdArray[i].length; k++) {
-					if (Math.round(Math.random() * 10 > 9)) {
+					if (Math.round(Math.random() * 20 > 17)) {
 						tdArray[i][k].classList.add("bomb");
 					}
 				}
