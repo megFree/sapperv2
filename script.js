@@ -60,17 +60,27 @@ window.addEventListener("load", function() {
 
 		for (let i = 0; i < tdArray.length; i++) {
 			for (let k = 0; k < tdArray[i].length; k++) {
-				tdArray[i][k].addEventListener("click", generateBombs);
+				tdArray[i][k].addEventListener("click", openCell);
 			}
 		}
 
 		for (let i = 0; i < tdArray.length; i++) {
 			for (let k = 0; k < tdArray[i].length; k++) {
-				tdArray[i][k].addEventListener("click", openCell);
+				tdArray[i][k].addEventListener("contextmenu", function(event) {
+					event.preventDefault();
+					if (!event.target.classList.contains("unOpened")) return;
+					event.target.classList.toggle("flag");
+					return false;
+				}, false);
 			}
 		}
 
+		let isFirst = true;
 		function openCell(event) {
+			if (isFirst) {
+				generateBombs(event);
+				isFirst = false;
+			}
 			//нажали на бомбу
 			if (event.target.classList.contains("bomb")) {
 				for (let i = 0; i < tdArray.length; i++) {
@@ -95,8 +105,12 @@ window.addEventListener("load", function() {
 			}
 
 			//нажали на цифру
-			event.target.querySelector(".innerDiv").classList.remove("hidden");
-			event.target.classList.remove("unOpened");
+			if (event.target.querySelector(".innerDiv").textContent != "") {
+				event.target.querySelector(".innerDiv").classList.remove("hidden");
+				event.target.classList.remove("unOpened");
+				event.target.classList.remove("flag");
+				wonGame();
+			}
 
 			//нажали на пустое место
 			if (event.target.querySelector(".innerDiv").textContent == "") {
@@ -108,14 +122,20 @@ window.addEventListener("load", function() {
 				let coords = elem.id.match(/[0-9]+/g);
 				let y = +coords[0];
 				let x = +coords[1];
+				elem.classList.remove("unOpened");
+				elem.querySelector(".innerDiv").classList.remove("hidden");
+				wonGame();
 
-				//добавили в массив правый элемент
 				toCheck.push(tdArray[y][x + 1]);
+				toCheck.push(tdArray[y][x - 1]);
+				toCheck.push(tdArray[y + 1][x]);
+				toCheck.push(tdArray[y - 1][x]);
 
 				for (let i = 0; i < toCheck.length; i++) {
-					toCheck[i].classList.remove("unOpened");
+					toCheck[i].classList.remove("unOpened", "flag");
 					toCheck[i].querySelector(".innerDiv").classList.remove("hidden");
 					toCheck[i].classList.add("checked");
+					wonGame();
 					if (toCheck[i].querySelector(".innerDiv").textContent != "") {
 						continue;
 					}
@@ -175,7 +195,7 @@ window.addEventListener("load", function() {
 						tdArray[i][k].classList.add("bomb");
 					}
 				}
-			}	
+			}
 			if (event.target.classList.contains("bomb")) {
 				event.target.classList.remove("bomb");
 			}
@@ -241,11 +261,22 @@ window.addEventListener("load", function() {
 					tdArray[i][k].classList.remove("_b");
 				}
 			}
-
+		}
+		function wonGame() {
+			let count = 0;
 			for (let i = 0; i < tdArray.length; i++) {
 				for (let k = 0; k < tdArray[i].length; k++) {
-					tdArray[i][k].removeEventListener("click", generateBombs);
+					if (tdArray[i][k].classList.contains("unOpened") && !tdArray[i][k].classList.contains("bomb")) {
+						count++;
+					} 
 				}
+			}
+			if (count == 0) {
+				let endGameDiv = document.createElement("div");
+				endGameDiv.textContent = "you won";
+				endGameDiv.classList.add("endGameDiv");
+				document.body.appendChild(endGameDiv);
+				document.body.removeChild(gameField);
 			}
 		}
 	});
