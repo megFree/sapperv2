@@ -126,10 +126,30 @@ window.addEventListener("load", function() {
 				elem.querySelector(".innerDiv").classList.remove("hidden");
 				wonGame();
 
-				toCheck.push(tdArray[y][x + 1]);
-				toCheck.push(tdArray[y][x - 1]);
-				toCheck.push(tdArray[y + 1][x]);
-				toCheck.push(tdArray[y - 1][x]);
+				if (tdArray[y][x + 1] != undefined) {
+					toCheck.push(tdArray[y][x + 1]);
+				}
+				if (tdArray[y][x - 1] != undefined) {
+					toCheck.push(tdArray[y][x - 1]);
+				}
+				if (tdArray[y + 1] != undefined) {
+					toCheck.push(tdArray[y + 1][x]);
+					if (tdArray[y + 1][x - 1] != undefined) {
+						toCheck.push(tdArray[y + 1][x - 1]);
+					}
+					if (tdArray[y + 1][x + 1] != undefined) {
+						toCheck.push(tdArray[y + 1][x + 1]);
+					}
+				}
+				if (tdArray[y - 1] != undefined) {
+					toCheck.push(tdArray[y - 1][x]);
+					if (tdArray[y - 1][x - 1] != undefined) {
+						toCheck.push(tdArray[y - 1][x - 1]);
+					}
+					if (tdArray[y - 1][x + 1] != undefined) {
+						toCheck.push(tdArray[y - 1][x + 1]);
+					}
+				}
 
 				for (let i = 0; i < toCheck.length; i++) {
 					toCheck[i].classList.remove("unOpened", "flag");
